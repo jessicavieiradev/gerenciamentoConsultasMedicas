@@ -1,6 +1,6 @@
 ﻿namespace sistemaAgendamentoMedico.Controllers
 {
-    public class MedicoController
+    public class MedicoController : BaseController<MedicoController>
     {
     }
 }
