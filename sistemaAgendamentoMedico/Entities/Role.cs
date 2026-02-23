@@ -1,0 +1,9 @@
+﻿namespace sistemaAgendamentoMedico.Entities
+{
+    public class Role
+    {
+        public long Id { get; set; }
+        public string Nome { get; set; }
+        public bool Ativo { get; set; }
+    }
+}

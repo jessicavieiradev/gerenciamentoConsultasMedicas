@@ -4,15 +4,14 @@ using sistemaAgendamentoMedico.Entities;
 
 namespace sistemaAgendamentoMedico.Data.Configurations
 {
-    public class AgendaConfiguration : IEntityTypeConfiguration<Agenda>
+    public class BloqueioConfiguration : IEntityTypeConfiguration<Bloqueio>
     {
-        public void Configure(EntityTypeBuilder<Agenda> builder)
+        public void Configure(EntityTypeBuilder<Bloqueio> builder)
         {
-            builder.ToTable("agenda");
+            builder.ToTable("bloqueios");
             builder.HasKey(x => x.Id);
 
-            builder.Property(x => x.DiaSemana).HasMaxLength(15);
-            builder.Property(x => x.Mes).HasMaxLength(10);
+            builder.Property(x => x.Motivo).HasMaxLength(200);
 
             builder.HasOne(x => x.Medico)
                    .WithMany()
