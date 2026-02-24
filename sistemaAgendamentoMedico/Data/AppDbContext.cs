@@ -13,7 +13,6 @@ namespace sistemaAgendamentoMedico.Data
         public DbSet<Agendamento> Agendamento { get; set; }
         public DbSet<Bloqueio> Bloqueio { get; set; }
         public DbSet<Usuario> Usuario { get; set; }
-        public DbSet<Role> Role { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
