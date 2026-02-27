@@ -5,6 +5,7 @@ using Microsoft.IdentityModel.Tokens;
 using sistemaAgendamentoMedico.Configurations;
 using sistemaAgendamentoMedico.Data;
 using sistemaAgendamentoMedico.Entities;
+using sistemaAgendamentoMedico.Interfaces;
 using sistemaAgendamentoMedico.Services;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -43,7 +44,7 @@ builder.Services.AddAuthentication(options =>
     };
 });
 
-builder.Services.AddScoped<TokenService>();
+builder.Services.AddScoped<ITokenService,TokenService>();
 
 var app = builder.Build();
 
@@ -57,18 +58,5 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
-
-app.MapGet("/test-token", async (TokenService tokenService) =>
-{
-    // Criamos um usuário "fake" só para testar a geração
-    var usuarioFake = new Usuario
-    {
-        Id = 1L,
-        Email = "teste@sistema.com",
-    };
-
-    var token = await tokenService.GerarToken(usuarioFake);
-    return Results.Ok(new { token });
-});
 
 app.Run();

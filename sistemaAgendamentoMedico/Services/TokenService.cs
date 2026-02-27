@@ -2,12 +2,13 @@
 using Microsoft.IdentityModel.JsonWebTokens;
 using Microsoft.IdentityModel.Tokens;
 using sistemaAgendamentoMedico.Entities;
+using sistemaAgendamentoMedico.Interfaces;
 using System.Security.Claims;
 using System.Text;
 
 namespace sistemaAgendamentoMedico.Services
 {
-    public class TokenService
+    public class TokenService : ITokenService
     {
         private readonly IConfiguration _configuration;
         private readonly UserManager<Usuario> _userManager;
@@ -22,11 +23,11 @@ namespace sistemaAgendamentoMedico.Services
             var handler = new JsonWebTokenHandler();
             var key = Encoding.UTF8.GetBytes(_configuration["Jwt:SecretKey"]!);
             var roles = await _userManager.GetRolesAsync(usuario);
-            var expiracaoMinutos = double.Parse(_configuration["Jwt:ExpirationInMinutes"] ?? "60");
+            var expiracaoMinutos = double.Parse(_configuration["Jwt:AudienceInMinutes"] ?? "60");
             var claims = new List<Claim>
             {
                 new Claim(JwtRegisteredClaimNames.Sub, usuario.Id.ToString()),
-                new Claim(JwtRegisteredClaimNames.Email, usuario.Email),
+                new Claim(JwtRegisteredClaimNames.Email, usuario.Email!),
             };
 
             foreach (var role in roles)
