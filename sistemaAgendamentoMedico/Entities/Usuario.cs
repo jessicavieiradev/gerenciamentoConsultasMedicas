@@ -4,6 +4,6 @@ namespace sistemaAgendamentoMedico.Entities
 {
     public class Usuario : IdentityUser<long>
     {
-        public bool Ativo { get; set; } = true;
+        public bool Ativo { get; set; } = true; 
     }
 }
