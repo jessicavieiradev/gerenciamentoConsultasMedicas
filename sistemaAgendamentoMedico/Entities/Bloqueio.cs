@@ -4,7 +4,7 @@
     {
         public long Id { get; set; }
         public long MedicoId { get; set; }
-        public Medico Medico { get; set; } = new Medico();
+        public Medico Medico { get; set; } = null!;
         public DateOnly DataInicio { get; set; }
         public DateOnly DataFim { get; set; }
         public string Motivo { get; set; } = string.Empty;

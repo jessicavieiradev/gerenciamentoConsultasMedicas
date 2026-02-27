@@ -4,7 +4,7 @@
     {
         public long Id { get; set; }
         public long MedicoId { get; set; }
-        public Medico Medico { get; set; } = new Medico();
+        public Medico Medico { get; set; } = null!;
         public string DiaSemana { get; set; } = string.Empty;
         public string Mes { get; set; } = string.Empty;
         public int Ano { get; set; }
