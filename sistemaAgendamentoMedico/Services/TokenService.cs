@@ -1,0 +1,50 @@
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.IdentityModel.JsonWebTokens;
+using Microsoft.IdentityModel.Tokens;
+using sistemaAgendamentoMedico.Entities;
+using System.Security.Claims;
+using System.Text;
+
+namespace sistemaAgendamentoMedico.Services
+{
+    public class TokenService
+    {
+        private readonly IConfiguration _configuration;
+        private readonly UserManager<Usuario> _userManager;
+        public TokenService(IConfiguration configuration, UserManager<Usuario> userManager)
+        {
+            _configuration = configuration;
+            _userManager = userManager;
+        }
+
+        public async Task<string> GerarToken(Usuario usuario)
+        {
+            var handler = new JsonWebTokenHandler();
+            var key = Encoding.UTF8.GetBytes(_configuration["Jwt:SecretKey"]!);
+            var roles = await _userManager.GetRolesAsync(usuario);
+            var expiracaoMinutos = double.Parse(_configuration["Jwt:ExpirationInMinutes"] ?? "60");
+            var claims = new List<Claim>
+            {
+                new Claim(JwtRegisteredClaimNames.Sub, usuario.Id.ToString()),
+                new Claim(JwtRegisteredClaimNames.Email, usuario.Email),
+            };
+
+            foreach (var role in roles)
+            {
+                claims.Add(new Claim(ClaimTypes.Role, role));
+            }
+
+           var descriptor = new SecurityTokenDescriptor
+            {
+                Issuer = _configuration["Jwt:Issuer"],
+                Audience = _configuration["Jwt:Audience"],
+                Subject = new ClaimsIdentity(claims),
+                Expires = DateTime.UtcNow.AddMinutes(expiracaoMinutos),
+                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
+
+           };
+            string token = handler.CreateToken(descriptor);
+            return token;
+        }
+    }
+}
