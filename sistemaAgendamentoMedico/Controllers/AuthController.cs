@@ -1,6 +1,15 @@
-﻿namespace sistemaAgendamentoMedico.Controllers
+﻿using Microsoft.AspNetCore.Mvc;
+
+namespace sistemaAgendamentoMedico.Controllers
 {
-    public class AuthController
+    [ApiController]
+    [Route("api/[controller]")]
+    public class AuthController : BaseController<AuthController>
     {
+        [HttpGet]
+        public IActionResult Get()
+        {
+            return Ok("AuthController funcionando!");
+        }
     }
 }
