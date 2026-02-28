@@ -22,7 +22,6 @@ namespace sistemaAgendamentoMedico.Data
 
                     if (!result.Succeeded)
                     {
-                        // Se cair aqui, houve um erro ao inserir
                         var erro = string.Join(", ", result.Errors.Select(e => e.Description));
                         throw new Exception($"Erro ao criar role: {erro}");
                     }

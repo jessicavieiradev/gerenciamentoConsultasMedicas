@@ -17,6 +17,13 @@ namespace sistemaAgendamentoMedico.Data.Configurations
 
             builder.Property(x => x.DataNascimento).HasColumnType("date");
             builder.Property(x => x.Telefone).HasMaxLength(11);
+
+            builder.HasOne(x => x.Usuario)
+               .WithOne() 
+               .HasForeignKey<Paciente>(x => x.UsuarioId) 
+               .OnDelete(DeleteBehavior.Cascade);
+
+            builder.HasIndex(x => x.UsuarioId).IsUnique();
         }
     }
 }
