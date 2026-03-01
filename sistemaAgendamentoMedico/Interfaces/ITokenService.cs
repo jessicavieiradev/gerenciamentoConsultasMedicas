@@ -4,6 +4,6 @@ namespace sistemaAgendamentoMedico.Interfaces
 {
     public interface ITokenService
     {
-        Task<string> GerarToken(Usuario usuario);
+        Task<string> GerarToken(Usuario usuario, string nomeCompleto);
     }
 }

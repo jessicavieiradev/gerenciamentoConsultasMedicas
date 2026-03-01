@@ -18,7 +18,7 @@ namespace sistemaAgendamentoMedico.Services
             _userManager = userManager;
         }
 
-        public async Task<string> GerarToken(Usuario usuario)
+        public async Task<string> GerarToken(Usuario usuario, string nomeCompleto)
         {
             var handler = new JsonWebTokenHandler();
             var key = Encoding.UTF8.GetBytes(_configuration["Jwt:SecretKey"]!);
@@ -27,7 +27,7 @@ namespace sistemaAgendamentoMedico.Services
             var claims = new List<Claim>
             {
                 new Claim(JwtRegisteredClaimNames.Sub, usuario.Id.ToString()),
-                new Claim(JwtRegisteredClaimNames.Email, usuario.Email!),
+                new Claim(JwtRegisteredClaimNames.Name, nomeCompleto),
             };
 
             foreach (var role in roles)
