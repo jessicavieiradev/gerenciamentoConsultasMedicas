@@ -47,7 +47,7 @@ Atualmente, o projeto conta com o **alicerce funcional** estabelecido, com foco 
 
 1.  **Clone o projeto:**
     ```bash
-    git clone [https://github.com/seu-usuario/sistemaAgendamentoMedico.git](https://github.com/seu-usuario/sistemaAgendamentoMedico.git)
+    git clone https://github.com/jessicavieiradev/gerenciamentoConsultasMedicas.git
     ```
 
 2.  **Configuração:**
