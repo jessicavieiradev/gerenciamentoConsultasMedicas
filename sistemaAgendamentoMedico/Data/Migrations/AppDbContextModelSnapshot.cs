@@ -328,9 +328,15 @@ namespace sistemaAgendamentoMedico.Data.Migrations
                         .HasMaxLength(11)
                         .HasColumnType("nvarchar(11)");
 
+                    b.Property<long>("UsuarioId")
+                        .HasColumnType("bigint");
+
                     b.HasKey("Id");
 
                     b.HasIndex("Cpf")
+                        .IsUnique();
+
+                    b.HasIndex("UsuarioId")
                         .IsUnique();
 
                     b.ToTable("paciente", (string)null);
@@ -499,6 +505,17 @@ namespace sistemaAgendamentoMedico.Data.Migrations
                         .IsRequired();
 
                     b.Navigation("Medico");
+                });
+
+            modelBuilder.Entity("sistemaAgendamentoMedico.Entities.Paciente", b =>
+                {
+                    b.HasOne("sistemaAgendamentoMedico.Entities.Usuario", "Usuario")
+                        .WithOne()
+                        .HasForeignKey("sistemaAgendamentoMedico.Entities.Paciente", "UsuarioId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Usuario");
                 });
 #pragma warning restore 612, 618
         }
