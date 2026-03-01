@@ -51,10 +51,6 @@ namespace sistemaAgendamentoMedico.Services
                     Telefone = request.Telefone,
                     Ativo = true
                 };
-
-                
-            try
-            {
                 _context.Paciente.Add(novoPaciente);
                 await _context.SaveChangesAsync();
                 return Result<AuthResponse>.Ok(new AuthResponse
@@ -63,17 +59,6 @@ namespace sistemaAgendamentoMedico.Services
                     Nome = request.NomeCompleto,
                     Role = PerfilUsuario.Paciente
                 });
-            }
-            catch (DbUpdateException dbEx)
-            {
-                // Isso vai te mostrar exatamente qual coluna está causando o erro
-                var mensagem = dbEx.InnerException?.Message ?? dbEx.Message;
-                return Result<AuthResponse>.Falha($"Erro de Banco: {mensagem}");
-            }
-            catch (Exception ex)
-            {
-                return Result<AuthResponse>.Falha($"Erro Geral: {ex.Message}");
-            }
         }
         public async Task<Result<AuthResponse>> LoginPaciente(LoginRequest request)
         {
