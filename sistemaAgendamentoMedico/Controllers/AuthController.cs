@@ -16,16 +16,9 @@ namespace sistemaAgendamentoMedico.Controllers
             _authService = authService;
         }
 
-        [HttpGet("teste")]
-        [AllowAnonymous]
-        public IActionResult Get()
-        {
-            return Ok("teste feito");
-        }
-
         [HttpPost("registrar")]
         [AllowAnonymous]
-        public async Task<IActionResult> Registrar([FromBody] RegistrarPacienteRequest request)
+        public async Task<IActionResult> RegistrarPaciente([FromBody] RegistrarPacienteRequest request)
         {
             var resultado = await _authService.RegistrarPaciente(request);
             if (!resultado.Sucesso)
@@ -37,7 +30,7 @@ namespace sistemaAgendamentoMedico.Controllers
 
         [HttpPost("login")]
         [AllowAnonymous]
-        public async Task<IActionResult> Login([FromBody] LoginRequest request)
+        public async Task<IActionResult> LoginPaciente([FromBody] LoginRequest request)
         {
             var resultado = await _authService.LoginPaciente(request);
             if (!resultado.Sucesso)
