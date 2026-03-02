@@ -35,8 +35,6 @@ O projeto está organizado para seguir boas práticas de **Injeção de Dependê
 
 ## 🛠 Status do Desenvolvimento (Core Features)
 
-Atualmente, o projeto conta com o **alicerce funcional** estabelecido, com foco na robustez da infraestrutura:
-
 * **⚡ Autenticação Base:** Fluxo de Login para Pacientes já operacional, realizando a emissão e validação de Tokens JWT.
 * **📊 Observabilidade:** Implementação de Logs estruturados via **Serilog** em fase de refinamento para monitoramento de erros.
 * **🗄 Camada de Dados:** Integração com SQL Server consolidada, utilizando Migrations para evolução constante do schema.
