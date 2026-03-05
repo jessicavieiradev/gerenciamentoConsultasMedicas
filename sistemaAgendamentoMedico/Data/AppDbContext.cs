@@ -11,6 +11,7 @@ namespace sistemaAgendamentoMedico.Data
 
         public DbSet<Medico> Medico { get; set; }
         public DbSet<Paciente> Paciente { get; set; }
+        public DbSet<Admin> Admin { get; set; }
         public DbSet<Agenda> Agenda { get; set; }
         public DbSet<Agendamento> Agendamento { get; set; }
         public DbSet<Bloqueio> Bloqueio { get; set; }
