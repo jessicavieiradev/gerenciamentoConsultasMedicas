@@ -11,6 +11,7 @@ namespace sistemaAgendamentoMedico.Controllers
     {
         private readonly IAuthService _authService;
 
+
         public AuthController(IAuthService authService)
         {
             _authService = authService;
@@ -38,6 +39,43 @@ namespace sistemaAgendamentoMedico.Controllers
                 return BadRequest(resultado);
             }
             return Ok(resultado);
+        }
+
+        [HttpPost("medico/registrar")]
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> RegistrarMedico([FromBody] RegistrarMedicoRequest request)
+        {
+            var resultado = await _authService.RegistrarMedico(request);
+            if (!resultado.Sucesso)
+            {
+                return BadRequest(resultado);
+            }
+            return Ok(resultado);
+        }
+
+        [HttpPost("medico/login")]
+        [AllowAnonymous]
+        public async Task<IActionResult> LoginMedico([FromBody] LoginMedico request)
+        {
+            var resultado = await _authService.LoginMedico(request);
+            if (!resultado.Sucesso)
+            {
+                return BadRequest(resultado);
+            }
+            return Ok(resultado);
+        }
+
+        [HttpPost("admin/login")]
+        [AllowAnonymous]
+        public async Task<IActionResult> LoginAdmin([FromBody] LoginAdmin request)
+        {
+            var resultado = await _authService.LoginAdmin(request);
+            if (!resultado.Sucesso)
+            {
+                return BadRequest(resultado);
+            }
+            return Ok(resultado);
+
         }
     }
 }
