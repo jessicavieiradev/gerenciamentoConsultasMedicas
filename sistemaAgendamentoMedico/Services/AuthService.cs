@@ -38,32 +38,33 @@ namespace sistemaAgendamentoMedico.Services
             var novoUsuario = await _userManager.CreateAsync(usuario, request.Senha);
             if (!novoUsuario.Succeeded)
             {
-                 var erros = novoUsuario.Errors.FirstOrDefault()?.Description ?? "Erro ao criar usuario";
+                var erros = novoUsuario.Errors.FirstOrDefault()?.Description ?? "Erro ao criar usuario";
                 return Result<AuthResponse>.Falha(erros);
             }
             await _userManager.AddToRoleAsync(usuario, PerfilUsuario.Paciente);
-                var novoPaciente = new Paciente
-                {
-                    UsuarioId = usuario.Id,
-                    NomeCompleto = request.NomeCompleto,
-                    Cpf = request.Cpf,
-                    DataNascimento = request.DataNascimento,
-                    Telefone = request.Telefone,
-                    Ativo = true
-                };
-                _context.Paciente.Add(novoPaciente);
-                await _context.SaveChangesAsync();
-                return Result<AuthResponse>.Ok(new AuthResponse
-                {
-                    Token = await _tokenService.GerarToken(usuario, novoPaciente.NomeCompleto),
-                    Nome = request.NomeCompleto,
-                    Role = PerfilUsuario.Paciente
-                });
+            var novoPaciente = new Paciente
+            {
+                UsuarioId = usuario.Id,
+                NomeCompleto = request.NomeCompleto,
+                Cpf = request.Cpf,
+                DataNascimento = request.DataNascimento,
+                Telefone = request.Telefone,
+                Ativo = true
+            };
+            _context.Paciente.Add(novoPaciente);
+            await _context.SaveChangesAsync();
+            return Result<AuthResponse>.Ok(new AuthResponse
+            {
+                Token = await _tokenService.GerarToken(usuario, novoPaciente.NomeCompleto),
+                Nome = request.NomeCompleto,
+                Role = PerfilUsuario.Paciente
+            });
         }
+
         public async Task<Result<AuthResponse>> LoginPaciente(LoginRequest request)
         {
             var usuarioExiste = await _context.Paciente.FirstOrDefaultAsync(p => p.Cpf == request.Cpf);
-            if(usuarioExiste == null)
+            if (usuarioExiste == null)
             {
                 return Result<AuthResponse>.Falha("Usuario ou senha invalidos.");
             }
@@ -89,5 +90,97 @@ namespace sistemaAgendamentoMedico.Services
             });
         }
 
+        public async Task<Result<string>> RegistrarMedico(RegistrarMedicoRequest request)
+        {
+            var medicoExiste = _context.Medico.Any(m => m.Cpf == request.Cpf);
+            if (medicoExiste)
+            {
+                return Result<string>.Falha("Medico ja cadastrado");
+            }
+            var usuario = new Usuario
+            {
+                UserName = request.Cpf,
+                Email = request.Email
+            };
+            var novoUsuario = await _userManager.CreateAsync(usuario, request.Senha);
+            if (!novoUsuario.Succeeded)
+            {
+                var erros = novoUsuario.Errors.FirstOrDefault()?.Description ?? "Erro ao criar usuario";
+                return Result<string>.Falha(erros);
+
+            }
+            await _userManager.AddToRoleAsync(usuario, PerfilUsuario.Medico);
+            var novoMedico = new Medico
+            {
+                UsuarioId = usuario.Id,
+                NomeCompleto = request.NomeCompleto,
+                Especialidade = request.Especialidade,
+                Crm = request.Crm,
+                Uf = request.Uf,
+                Cpf = request.Cpf,
+                Ativo = true
+            };
+            _context.Medico.Add(novoMedico);
+            await _context.SaveChangesAsync();
+            return Result<string>.Ok($"Cadastro realizado com sucesso do medico {novoMedico.NomeCompleto}");
+        }
+
+        public async Task<Result<AuthResponse>> LoginMedico(LoginMedico request)
+        {
+            var usuarioExiste = await _context.Medico.FirstOrDefaultAsync(p => p.Cpf == request.Cpf);
+            if (usuarioExiste == null)
+            {
+                return Result<AuthResponse>.Falha("Usuario ou senha invalidos.");
+            }
+            var usuario = await _userManager.FindByIdAsync(usuarioExiste.UsuarioId.ToString());
+
+            if (usuario == null)
+            {
+                return Result<AuthResponse>.Falha("Usuario ou senha invalidos.");
+            }
+
+            var senhaValida = await _userManager.CheckPasswordAsync(usuario, request.Senha);
+
+            if (!senhaValida)
+            {
+                return Result<AuthResponse>.Falha("Usuario ou senha invalidos.");
+            }
+
+            return Result<AuthResponse>.Ok(new AuthResponse
+            {
+                Token = await _tokenService.GerarToken(usuario, usuarioExiste.NomeCompleto),
+                Nome = usuarioExiste.NomeCompleto,
+                Role = PerfilUsuario.Medico
+            });
+        }
+
+        public async Task<Result<AuthResponse>> LoginAdmin(LoginAdmin request)
+        {
+            var usuarioExiste = await _context.Admin.FirstOrDefaultAsync(p => p.EmailCorporativo == request.Email);
+            if (usuarioExiste == null)
+            {
+                return Result<AuthResponse>.Falha("Usuario ou senha invalidos.");
+            }
+            var usuario = await _userManager.FindByIdAsync(usuarioExiste.UsuarioId.ToString());
+
+            if (usuario == null)
+            {
+                return Result<AuthResponse>.Falha("Usuario ou senha invalidos.");
+            }
+
+            var senhaValida = await _userManager.CheckPasswordAsync(usuario, request.Senha);
+
+            if (!senhaValida)
+            {
+                return Result<AuthResponse>.Falha("Usuario ou senha invalidos.");
+            }
+
+            return Result<AuthResponse>.Ok(new AuthResponse
+            {
+                Token = await _tokenService.GerarToken(usuario, usuarioExiste.NomeCompleto),
+                Nome = usuarioExiste.NomeCompleto,
+                Role = PerfilUsuario.Admin
+            });
+        }
     }
 }
