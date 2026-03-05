@@ -54,9 +54,9 @@ builder.Services.AddAuthentication(options =>
     options.TokenValidationParameters = new TokenValidationParameters
     {
         ValidateIssuer = true,
-        ValidIssuer = builder.Configuration["Jwt:Issuer"],
+        ValidIssuer = builder.Configuration["Jwt:Issuer"] ?? "https://localhost:7052",
         ValidateAudience = true,
-        ValidAudience = builder.Configuration["Jwt:Audience"],
+        ValidAudience = builder.Configuration["Jwt:Audience"] ?? "https://localhost:7052",
         ValidateIssuerSigningKey = true,
         IssuerSigningKey = new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes(builder.Configuration["Jwt:SecretKey"]!))
     };
@@ -69,7 +69,7 @@ var app = builder.Build();
 
 // Configure the HTTP request pipeline.
 
-await app.CriarRolesPadrao();
+await app.ConfiguracoesIniciais();
 
 if (app.Environment.IsDevelopment())
 {

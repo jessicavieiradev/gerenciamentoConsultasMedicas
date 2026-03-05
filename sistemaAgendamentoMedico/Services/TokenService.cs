@@ -37,8 +37,8 @@ namespace sistemaAgendamentoMedico.Services
 
            var descriptor = new SecurityTokenDescriptor
             {
-                Issuer = _configuration["Jwt:Issuer"],
-                Audience = _configuration["Jwt:Audience"],
+                Issuer = _configuration["Jwt:Issuer"] ?? "https://localhost:7052",
+                Audience = _configuration["Jwt:Audience"] ?? "https://localhost:7052",
                 Subject = new ClaimsIdentity(claims),
                 Expires = DateTime.UtcNow.AddMinutes(expiracaoMinutos),
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
